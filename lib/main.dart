@@ -67,7 +67,7 @@ class _RotatingConcentricCirclesState extends State<RotatingConcentricCircles> {
                 child: CustomPaint(
                   size: Size(800, 800),
                   painter:
-                  RingPainter(["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛"]),
+                      RingPainter(["兑七", "乾六", "坎一", "艮八", "震三", "巽四", "离九", "坤二"]),
                 ),
               ),
             ),
@@ -78,7 +78,7 @@ class _RotatingConcentricCirclesState extends State<RotatingConcentricCircles> {
                 child: CustomPaint(
                   size: Size(600, 600),
                   painter:
-                  RingPainter(["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛"]),
+                      RingPainter(["惊", "开", "休", "生", "伤", "杜", "景", "死"]),
                 ),
               ),
             ),
@@ -89,7 +89,7 @@ class _RotatingConcentricCirclesState extends State<RotatingConcentricCircles> {
                 child: CustomPaint(
                   size: Size(400, 400),
                   painter:
-                  RingPainter(["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛"]),
+                      RingPainter(["柱", "心", "蓬", "任", "冲", "辅", "英", "禽芮"]),
                 ),
               ),
             ),
@@ -99,8 +99,8 @@ class _RotatingConcentricCirclesState extends State<RotatingConcentricCircles> {
                 angle: innerAngle,
                 child: CustomPaint(
                   size: Size(200, 200),
-                  painter:
-                  RingPainter(["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛"]),
+                  painter: RingPainter(
+                      ["真符", "九天", "九地", "玄武", "白虎", "六和", "太阴", "腾蛇"]),
                 ),
               ),
             ),
@@ -111,7 +111,6 @@ class _RotatingConcentricCirclesState extends State<RotatingConcentricCircles> {
   }
 }
 
-
 class RingPainter extends CustomPainter {
   final List<String> labels;
 
@@ -120,7 +119,7 @@ class RingPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final outerRadius = size.width / 2;
-    final innerRadius = outerRadius -100;
+    final innerRadius = outerRadius - 100;
     final center = Offset(size.width / 2, size.height / 2);
     final elements = labels;
     final sweepAngle = 2 * pi / elements.length;
@@ -139,8 +138,8 @@ class RingPainter extends CustomPainter {
 
       // Draw each segment
       final segmentPaint = Paint()
-        ..color = Colors.primaries[i % Colors.primaries.length].withOpacity(0.3)
-        ..style = PaintingStyle.fill;
+        ..color = Colors.primaries[i % 4].withOpacity(0.3)
+        ..style = PaintingStyle.stroke;
 
       canvas.drawArc(
         Rect.fromCircle(center: center, radius: outerRadius),
