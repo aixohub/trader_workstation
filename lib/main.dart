@@ -158,18 +158,29 @@ class RingPainterFirst extends CustomPainter {
       );
       textPainter.layout();
 
-      // Calculate position for each text
+      // Calculate the position for text
       final textAngle = startAngle + sweepAngle / 2;
-      final textOffset = Offset(
-        center.dx +
-            (outerRadius + innerRadius) / 2 * cos(textAngle) -
-            textPainter.width / 2,
-        center.dy +
-            (outerRadius + innerRadius) / 2 * sin(textAngle) -
-            textPainter.height / 2,
+      final textRadius = (outerRadius + innerRadius) / 2;
+      final textPosition = Offset(
+        center.dx + textRadius * cos(textAngle),
+        center.dy + textRadius * sin(textAngle),
       );
 
-      textPainter.paint(canvas, textOffset);
+      // Save canvas state
+      canvas.save();
+
+      // Move canvas to text position and rotate it
+      canvas.translate(textPosition.dx, textPosition.dy);
+      canvas.rotate(textAngle - pi / 2); // Adjust for bottom to face center
+
+      // Draw the text centered horizontally
+      textPainter.paint(
+        canvas,
+        Offset(-textPainter.width / 2, -textPainter.height / 2),
+      );
+
+      // Restore canvas state
+      canvas.restore();
     }
   }
 
@@ -230,20 +241,29 @@ class RingPainterSecond extends CustomPainter {
       );
       textPainter.layout();
 
-      // Calculate position for each text
+      // Calculate the position for text
       final textAngle = startAngle + sweepAngle / 2;
-
-      final textOffset = Offset(
-        center.dx +
-            (outerRadius + innerRadius) / 2 * cos(textAngle) -
-            textPainter.width / 2,
-        center.dy +
-            (outerRadius + innerRadius) / 2 * sin(textAngle) -
-            textPainter.height / 2,
+      final textRadius = (outerRadius + innerRadius) / 2;
+      final textPosition = Offset(
+        center.dx + textRadius * cos(textAngle),
+        center.dy + textRadius * sin(textAngle),
       );
 
+      // Save canvas state
+      canvas.save();
 
-      textPainter.paint(canvas, textOffset);
+      // Move canvas to text position and rotate it
+      canvas.translate(textPosition.dx, textPosition.dy);
+      canvas.rotate(textAngle - pi / 2); // Adjust for bottom to face center
+
+      // Draw the text centered horizontally
+      textPainter.paint(
+        canvas,
+        Offset(-textPainter.width / 2, -textPainter.height / 2),
+      );
+
+      // Restore canvas state
+      canvas.restore();
 
     }
   }
@@ -300,18 +320,29 @@ class RingPainterThird extends CustomPainter {
       );
       textPainter.layout();
 
-      // Calculate position for each text
+      // Calculate the position for text
       final textAngle = startAngle + sweepAngle / 2;
-      final textOffset = Offset(
-        center.dx +
-            (outerRadius + innerRadius) / 2 * cos(textAngle) -
-            textPainter.width / 2,
-        center.dy +
-            (outerRadius + innerRadius) / 2 * sin(textAngle) -
-            textPainter.height / 2,
+      final textRadius = (outerRadius + innerRadius) / 2;
+      final textPosition = Offset(
+        center.dx + textRadius * cos(textAngle),
+        center.dy + textRadius * sin(textAngle),
       );
 
-      textPainter.paint(canvas, textOffset);
+      // Save canvas state
+      canvas.save();
+
+      // Move canvas to text position and rotate it
+      canvas.translate(textPosition.dx, textPosition.dy);
+      canvas.rotate(textAngle - pi / 2); // Adjust for bottom to face center
+
+      // Draw the text centered horizontally
+      textPainter.paint(
+        canvas,
+        Offset(-textPainter.width / 2, -textPainter.height / 2),
+      );
+
+      // Restore canvas state
+      canvas.restore();
     }
   }
 
@@ -345,7 +376,7 @@ class RingPainterFour extends CustomPainter {
 
       // Draw each segment
       final segmentPaint = Paint()
-        ..color = Colors.primaries[i % 4].withOpacity(0.3)
+        ..color = Colors.primaries[i % Colors.primaries.length].withOpacity(0.3)
         ..style = PaintingStyle.stroke;
 
       canvas.drawArc(
@@ -356,7 +387,7 @@ class RingPainterFour extends CustomPainter {
         segmentPaint,
       );
 
-      // Draw text in each segment
+      // Prepare text
       final textPainter = TextPainter(
         text: TextSpan(
           text: elements[i],
@@ -366,18 +397,29 @@ class RingPainterFour extends CustomPainter {
       );
       textPainter.layout();
 
-      // Calculate position for each text
+      // Calculate the position for text
       final textAngle = startAngle + sweepAngle / 2;
-      final textOffset = Offset(
-        center.dx +
-            (outerRadius + innerRadius) / 2 * cos(textAngle) -
-            textPainter.width / 2,
-        center.dy +
-            (outerRadius + innerRadius) / 2 * sin(textAngle) -
-            textPainter.height / 2,
+      final textRadius = (outerRadius + innerRadius) / 2;
+      final textPosition = Offset(
+        center.dx + textRadius * cos(textAngle),
+        center.dy + textRadius * sin(textAngle),
       );
 
-      textPainter.paint(canvas, textOffset);
+      // Save canvas state
+      canvas.save();
+
+      // Move canvas to text position and rotate it
+      canvas.translate(textPosition.dx, textPosition.dy);
+      canvas.rotate(textAngle - pi / 2); // Adjust for bottom to face center
+
+      // Draw the text centered horizontally
+      textPainter.paint(
+        canvas,
+        Offset(-textPainter.width / 2, -textPainter.height / 2),
+      );
+
+      // Restore canvas state
+      canvas.restore();
     }
   }
 
