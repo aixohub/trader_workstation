@@ -66,8 +66,7 @@ class _RotatingConcentricCirclesState extends State<RotatingConcentricCircles> {
                 angle: fourAngle,
                 child: CustomPaint(
                   size: Size(800, 800),
-                  painter:
-                      RingPainter(["兑七", "乾六", "坎一", "艮八", "震三", "巽四", "离九", "坤二"]),
+                  painter: RingPainterFour(),
                 ),
               ),
             ),
@@ -77,8 +76,7 @@ class _RotatingConcentricCirclesState extends State<RotatingConcentricCircles> {
                 angle: outerAngle,
                 child: CustomPaint(
                   size: Size(600, 600),
-                  painter:
-                      RingPainter(["惊", "开", "休", "生", "伤", "杜", "景", "死"]),
+                  painter: RingPainterThird(),
                 ),
               ),
             ),
@@ -88,8 +86,8 @@ class _RotatingConcentricCirclesState extends State<RotatingConcentricCircles> {
                 angle: middleAngle,
                 child: CustomPaint(
                   size: Size(400, 400),
-                  painter:
-                      RingPainter(["柱", "心", "蓬", "任", "冲", "辅", "英", "禽芮"]),
+                  painter: RingPainterSecond(
+                      ["柱", "心", "蓬", "任", "冲", "辅", "英", "禽芮"]),
                 ),
               ),
             ),
@@ -99,7 +97,7 @@ class _RotatingConcentricCirclesState extends State<RotatingConcentricCircles> {
                 angle: innerAngle,
                 child: CustomPaint(
                   size: Size(200, 200),
-                  painter: RingPainter(
+                  painter: RingPainterFirst(
                       ["真符", "九天", "九地", "玄武", "白虎", "六和", "太阴", "腾蛇"]),
                 ),
               ),
@@ -111,10 +109,11 @@ class _RotatingConcentricCirclesState extends State<RotatingConcentricCircles> {
   }
 }
 
-class RingPainter extends CustomPainter {
+// 神盘
+class RingPainterFirst extends CustomPainter {
   final List<String> labels;
 
-  RingPainter(this.labels);
+  RingPainterFirst(this.labels);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -122,6 +121,214 @@ class RingPainter extends CustomPainter {
     final innerRadius = outerRadius - 100;
     final center = Offset(size.width / 2, size.height / 2);
     final elements = labels;
+    final sweepAngle = 2 * pi / elements.length;
+
+    // Paint for outer and inner rings
+    final ringPaint = Paint()
+      ..color = Colors.grey.shade300
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = outerRadius - innerRadius;
+
+    // Draw outer and inner rings
+    canvas.drawCircle(center, (outerRadius + innerRadius) / 2, ringPaint);
+
+    for (int i = 0; i < elements.length; i++) {
+      final startAngle = i * sweepAngle;
+
+      // Draw each segment
+      final segmentPaint = Paint()
+        ..color = Colors.primaries[i % 4].withOpacity(0.3)
+        ..style = PaintingStyle.stroke;
+
+      canvas.drawArc(
+        Rect.fromCircle(center: center, radius: outerRadius),
+        startAngle,
+        sweepAngle,
+        true,
+        segmentPaint,
+      );
+
+      // Draw text in each segment
+      final textPainter = TextPainter(
+        text: TextSpan(
+          text: elements[i],
+          style: TextStyle(color: Colors.black, fontSize: 16),
+        ),
+        textDirection: TextDirection.ltr,
+      );
+      textPainter.layout();
+
+      // Calculate position for each text
+      final textAngle = startAngle + sweepAngle / 2;
+      final textOffset = Offset(
+        center.dx +
+            (outerRadius + innerRadius) / 2 * cos(textAngle) -
+            textPainter.width / 2,
+        center.dy +
+            (outerRadius + innerRadius) / 2 * sin(textAngle) -
+            textPainter.height / 2,
+      );
+
+      textPainter.paint(canvas, textOffset);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+// 天盘
+class RingPainterSecond extends CustomPainter {
+  final List<String> labels;
+
+  RingPainterSecond(this.labels);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final outerRadius = size.width / 2;
+    final innerRadius = outerRadius - 100;
+    final center = Offset(size.width / 2, size.height / 2);
+    final elements = labels;
+    final sweepAngle = 2 * pi / elements.length;
+
+    // Paint for outer and inner rings
+    final ringPaint = Paint()
+      ..color = Colors.grey.shade300
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = outerRadius - innerRadius;
+
+    // Draw outer and inner rings
+    canvas.drawCircle(center, (outerRadius + innerRadius) / 2, ringPaint);
+
+    for (int i = 0; i < elements.length; i++) {
+
+      final startAngle = i * sweepAngle;
+
+      // Draw each segment
+      final segmentPaint = Paint()
+        ..color = Colors.primaries[i % 4].withOpacity(0.3)
+        ..style = PaintingStyle.stroke;
+
+      canvas.drawArc(
+        Rect.fromCircle(center: center, radius: outerRadius),
+        startAngle,
+        sweepAngle,
+        true,
+        segmentPaint,
+      );
+
+      // 计算文本的旋转角度，使文字顶部朝向圆心
+      // Draw text in each segment
+      final textPainter = TextPainter(
+        text: TextSpan(
+          text: elements[i],
+          style: TextStyle(color: Colors.black, fontSize: 16),
+        ),
+        textDirection: TextDirection.ltr,
+      );
+      textPainter.layout();
+
+      // Calculate position for each text
+      final textAngle = startAngle + sweepAngle / 2;
+
+      final textOffset = Offset(
+        center.dx +
+            (outerRadius + innerRadius) / 2 * cos(textAngle) -
+            textPainter.width / 2,
+        center.dy +
+            (outerRadius + innerRadius) / 2 * sin(textAngle) -
+            textPainter.height / 2,
+      );
+
+
+      textPainter.paint(canvas, textOffset);
+
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+// 人
+class RingPainterThird extends CustomPainter {
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final outerRadius = size.width / 2;
+    final innerRadius = outerRadius - 100;
+    final center = Offset(size.width / 2, size.height / 2);
+    final elements = ["惊", "开", "休", "生", "伤", "杜", "景", "死"];
+    final sweepAngle = 2 * pi / elements.length;
+
+    // Paint for outer and inner rings
+    final ringPaint = Paint()
+      ..color = Colors.grey.shade300
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = outerRadius - innerRadius;
+
+    // Draw outer and inner rings
+    canvas.drawCircle(center, (outerRadius + innerRadius) / 2, ringPaint);
+
+    for (int i = 0; i < elements.length; i++) {
+      final startAngle = i * sweepAngle;
+
+      // Draw each segment
+      final segmentPaint = Paint()
+        ..color = Colors.primaries[i % 4].withOpacity(0.3)
+        ..style = PaintingStyle.stroke;
+
+      canvas.drawArc(
+        Rect.fromCircle(center: center, radius: outerRadius),
+        startAngle,
+        sweepAngle,
+        true,
+        segmentPaint,
+      );
+
+      // Draw text in each segment
+      final textPainter = TextPainter(
+        text: TextSpan(
+          text: elements[i],
+          style: TextStyle(color: Colors.black, fontSize: 16),
+        ),
+        textDirection: TextDirection.ltr,
+      );
+      textPainter.layout();
+
+      // Calculate position for each text
+      final textAngle = startAngle + sweepAngle / 2;
+      final textOffset = Offset(
+        center.dx +
+            (outerRadius + innerRadius) / 2 * cos(textAngle) -
+            textPainter.width / 2,
+        center.dy +
+            (outerRadius + innerRadius) / 2 * sin(textAngle) -
+            textPainter.height / 2,
+      );
+
+      textPainter.paint(canvas, textOffset);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+// 地
+class RingPainterFour extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final outerRadius = size.width / 2;
+    final innerRadius = outerRadius - 100;
+    final center = Offset(size.width / 2, size.height / 2);
+    final elements = ["兑七", "乾六", "坎一", "艮八", "震三", "巽四", "离九", "坤二"];
     final sweepAngle = 2 * pi / elements.length;
 
     // Paint for outer and inner rings
